@@ -5,7 +5,7 @@ export function normalizeSpot(raw,symbol,now=Date.now()){
  return {price:raw.price,quoteTime,realtime:age<=90,marketOpen:false,bars:[],source:'Gold API · spot USD',quoteOnly:true,quoteFresh:age<=90};
 }
 export async function loadSpotQuotes(fetcher=fetch,now=Date.now()){
- const pairs=[['GC','XAU'],['SI','XAG']];
+ const pairs=[['GC','XAU'],['SI','XAG'],['PL','XPT'],['PA','XPD']];
  const results=await Promise.allSettled(pairs.map(async([id,symbol])=>{
  const r=await fetcher('https://api.gold-api.com/price/'+symbol,{signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error('Feed HTTP '+r.status);
  return [id,normalizeSpot(await r.json(),symbol,now)];}));
