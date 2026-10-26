@@ -1,15 +1,18 @@
-# Commodity Compass
+# Compass — Jekyll
 
-Dashboard italiana per analisi giornaliera di 8 commodities, grafici, strategie e backtest. Nessun ordine automatico o collegamento a XTB.
+Tema Jekyll basato su Minima, layout personalizzato per schede semaforo. Pagina principale essenziale, analisi giornaliera precedente in laboratorio.html.
 
-## GitHub Pages
-Workflow `.github/workflows/pages.yml`: test, aggiornamento storico, pubblicazione Pages. Settings → Pages → Source: GitHub Actions.
+## Dati e stati
+Il feed gratuito Yahoo intraday viene aggiornato da GitHub Actions ogni 15 minuti (possibili ritardi Actions). Non è certificato live: realtime=false, quindi NON attiva ingressi verdi. La pagina mostra sempre il timestamp del prezzo.
 
-## Dati
-`scripts/update_data.py` richiede serie Yahoo Finance. Gli snapshot iniziali sono in `data/`; il workflow conserva e committa gli aggiornamenti prima della pubblicazione. In caso di errore mantiene i dati precedenti. I segnali oltre 96 ore vengono bloccati. Aggiornamento programmato 06:15 e 22:15 UTC, soggetto ai ritardi di GitHub Actions.
+Il menu Collegamento dati può ricevere un endpoint HTTPS autorizzato che restituisca feed-format.json con CORS. Nessuna API key nel browser o nel repo. Il feed deve fornire dati dello stesso strumento e certificare realtime e marketOpen. Chiave/provider realtime non ancora forniti.
 
-## Limiti
-Dati futures continui, non prezzi XTB; controllare rollover e unità. Backtest a regole fisse con costi stimati, ma senza finanziamento overnight o costi rollover. Non certifica rendimenti futuri. Nessun segreto o dato del conto nel repository.
+Verde solo con quote <=90 secondi, sessione aperta, ultimo breakout 20 barre da <=90 secondi, EMA50, dati 5 minuti completi, ATR14 e distanza <=0,25 ATR. Stop 2 ATR e target 4 ATR dal prezzo. Parametri indicativi: i prezzi del provider non equivalgono necessariamente ai contratti del broker. Nessun orario futuro inventato. Le regole intraday non sono validate dal backtest giornaliero.
 
-## Sviluppo
-`node engine-test.mjs` e `python scripts/update_data.py`. Servire la cartella con un server HTTP statico.
+## Test e build
+node signal-test.mjs
+node engine-test.mjs
+bundle install
+bundle exec jekyll build
+
+Workflow pages.yml aggiorna dati, salva snapshot e pubblica. GitHub Actions pianificato non garantisce puntualità o tempo reale. Performance non garantite; test paper prima dell'uso reale.

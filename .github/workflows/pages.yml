@@ -4,7 +4,7 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '15 6,22 * * *'
+    - cron: '*/15 * * * *'
 permissions:
   contents: write
   pages: write
@@ -23,10 +23,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Test strategy engine
-        run: node engine-test.mjs
+      - name: Test strategy engines
+        run: node engine-test.mjs && node signal-test.mjs
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
       - name: Update historical data
-        run: python scripts/update_data.py
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then python scripts/update_data.py; fi
+          python scripts/update_intraday.py
       - name: Preserve latest available datasets
         run: |
           git config user.name 'github-actions[bot]'
@@ -40,11 +46,8 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
-      - name: Package public files
-        run: |
-          mkdir -p public/data
-          cp index.html .nojekyll public/
-          cp data/*.json public/data/
+      - name: Build Jekyll theme
+        run: bundle exec jekyll build --destination public
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
