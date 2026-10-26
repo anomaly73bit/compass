@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test strategy engines
-        run: node engine-test.mjs && node signal-test.mjs
+        run: node engine-test.mjs && node signal-test.mjs && node live-feed-test.mjs
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"

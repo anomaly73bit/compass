@@ -3,4 +3,4 @@ description: Segnali commodities
 url: https://compass.pacificit.solutions
 baseurl: ""
 theme: minima
-exclude: [scripts, engine-test.mjs, signal-test.mjs, package.json, Gemfile, Gemfile.lock, README.md, node_modules, vendor]
+exclude: [scripts, engine-test.mjs, signal-test.mjs, live-feed-test.mjs, package.json, Gemfile, Gemfile.lock, README.md, node_modules, vendor]

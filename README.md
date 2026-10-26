@@ -16,3 +16,6 @@ bundle install
 bundle exec jekyll build
 
 Workflow pages.yml aggiorna dati, salva snapshot e pubblica. GitHub Actions pianificato non garantisce puntualità o tempo reale. Performance non garantite; test paper prima dell'uso reale.
+
+## Quotazioni spot gratuite
+Gold API XAU e XAG integrato direttamente nel browser, aggiornamento ogni 30 secondi. Nessuna chiave per i prezzi. Timestamp del provider = ultima acquisizione, non timestamp exchange. I prezzi spot NON vengono mischiati alle candele futures. Il feed non fornisce sessione aperta verificata: marketOpen=false. Mancano storico spot OHLC e validazione intraday per attivare ingressi. OHLC gratuito 10 chiamate/ora, richiede account/chiave conservata lato server. Fonte: https://gold-api.com/faqs
