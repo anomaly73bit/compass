@@ -1,0 +1,1 @@
+{"name":"commodity-compass","private":true,"type":"module","scripts":{"test":"node engine-test.mjs"}}
