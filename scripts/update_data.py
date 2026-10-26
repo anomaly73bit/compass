@@ -1,12 +1,12 @@
 import concurrent.futures,datetime,json,math,pathlib,urllib.request,urllib.parse,time
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-SYMBOLS=['GC=F','SI=F','CL=F','NG=F','BZ=F','HG=F','ZC=F','ZW=F']
+SYMBOLS=[a[0]+'=F' for a in json.loads((ROOT/'assets/markets.json').read_text())]
 def download(symbol):
     path=ROOT/'data'/(symbol.replace('=F','')+'.json')
     try:
         url='https://query1.finance.yahoo.com/v8/finance/chart/'+urllib.parse.quote(symbol)+'?range=10y&interval=1d'
         req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-        with urllib.request.urlopen(req,timeout=40) as res: raw=json.load(res)
+        with urllib.request.urlopen(req,timeout=20) as res: raw=json.load(res)
         result=raw['chart']['result'][0];q=result['indicators']['quote'][0];rows=[]
         today=datetime.datetime.now(datetime.timezone.utc).date().isoformat()
         for i,t in enumerate(result['timestamp']):

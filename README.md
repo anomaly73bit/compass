@@ -1,21 +1,9 @@
-# Compass — Jekyll
+# Compass — strategie giornaliere
 
-Tema Jekyll basato su Minima, layout personalizzato per schede semaforo. Pagina principale essenziale, analisi giornaliera precedente in laboratorio.html.
+Jekyll / GitHub Pages. 26 commodities. Motore scripts/backtest.py, report data/research.json, frontend assets/app.js.
 
-## Dati e stati
-Il feed gratuito Yahoo intraday viene aggiornato da GitHub Actions ogni 15 minuti (possibili ritardi Actions). Non è certificato live: realtime=false, quindi NON attiva ingressi verdi. La pagina mostra sempre il timestamp del prezzo.
+Tre regole prefissate: breakout20, pullbackRSI2, momentum63 con filtro EMA50/200. Selezione su primo70% per expectancyR netta (almeno30 trade se disponibile); verifica cronologica restante30%, non usata per scegliere il modello. Costi10bp/lato, rischio0.5%, notional1x. Pending stop su high/low precedente±0.05ATR; trigger valido una seduta, gap>0.5ATR annulla. Stop2ATR/target3ATR, stop prioritario se entrambi nella candela, massimo20 sedute. Intervallo winrate Wilson95%; non è probabilità del prossimo trade. Drawdown close-to-close mark-to-market. Finanziamento CFD, roll, imposte e cambio esclusi. Il future continuo può avere discontinuità. Validazione retrospettiva con selezione multipla, nessun track record live.
 
-Il menu Collegamento dati può ricevere un endpoint HTTPS autorizzato che restituisca feed-format.json con CORS. Nessuna API key nel browser o nel repo. Il feed deve fornire dati dello stesso strumento e certificare realtime e marketOpen. Chiave/provider realtime non ancora forniti.
+Setup verde D1 solo se minimo30 trade training/20 test, PF≥1.1, expectancy positiva, DD≤20%, stress costi doppi positivo e segnale corrente. Non conferma che il trigger non sia già stato toccato. Piano valido nella prossima data feriale dopo l'ultima chiusura (weekend esclusi, festività non modellate; scadenza conservativa). Nessun ordine eseguito, livelli futures da confrontare al contratto effettivo. Spot Gold API separato dai test.
 
-Verde solo con quote <=90 secondi, sessione aperta, ultimo breakout 20 barre da <=90 secondi, EMA50, dati 5 minuti completi, ATR14 e distanza <=0,25 ATR. Stop 2 ATR e target 4 ATR dal prezzo. Parametri indicativi: i prezzi del provider non equivalgono necessariamente ai contratti del broker. Nessun orario futuro inventato. Le regole intraday non sono validate dal backtest giornaliero.
-
-## Test e build
-node signal-test.mjs
-node engine-test.mjs
-bundle install
-bundle exec jekyll build
-
-Workflow pages.yml aggiorna dati, salva snapshot e pubblica. GitHub Actions pianificato non garantisce puntualità o tempo reale. Performance non garantite; test paper prima dell'uso reale.
-
-## Quotazioni spot gratuite
-Gold API XAU e XAG integrato direttamente nel browser, aggiornamento ogni 30 secondi. Nessuna chiave per i prezzi. Timestamp del provider = ultima acquisizione, non timestamp exchange. I prezzi spot NON vengono mischiati alle candele futures. Il feed non fornisce sessione aperta verificata: marketOpen=false. Mancano storico spot OHLC e validazione intraday per attivare ingressi. OHLC gratuito 10 chiamate/ora, richiede account/chiave conservata lato server. Fonte: https://gold-api.com/faqs
+Workflow aggiorna storici26, intraday e report prima di Jekyll. `python scripts/test_backtest.py` verifica causalità, stop-first, ordini non eseguiti, cancellazione gap e costi.

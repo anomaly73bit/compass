@@ -24,15 +24,16 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test strategy engines
-        run: node engine-test.mjs && node signal-test.mjs && node live-feed-test.mjs
+        run: node engine-test.mjs && node signal-test.mjs && node live-feed-test.mjs && python scripts/test_backtest.py
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
           bundler-cache: true
       - name: Update historical data
         run: |
-          if [ "${{ github.event_name }}" != "schedule" ]; then python scripts/update_data.py; fi
+          python scripts/update_data.py
           python scripts/update_intraday.py
+          python scripts/backtest.py
       - name: Preserve latest available datasets
         run: |
           git config user.name 'github-actions[bot]'
